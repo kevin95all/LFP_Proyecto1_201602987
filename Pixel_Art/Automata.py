@@ -56,10 +56,40 @@ class Automata:
                     self.estado = 1
                 elif self.caracter == '=':
                     self.estado = 2
+                    self.lista_tokens.append(f'\tSimbolo\t\t Caracter\t\t Fila:\t {f}\t\t Columna:\t {c+1}')
                 else:
                     self.estado = 1
-                    self.lista_errores.append(f'\tFila:\t {f}\t\t Columna:\t {c + 1}\t\t Error:\t {self.caracter}')
+                    self.lista_errores.append(f'\tFila:\t {f}\t\t Columna:\t {c+1}\t\t Error:\t {self.caracter}')
             elif self.estado == 2:  # -----------------------------------> Estado 2
-                pass
+                if self.caracter == '"':
+                    self.estado = 3
+                elif self.digito(self.caracter):
+                    self.estado = 4
+                    self.token = self.token + self.caracter
+                    self.lista_tokens.append(f'\tDigito\t\t Numeros\t\t Fila:\t {f}\t\t Columna:\t {c+1}')
+                elif self.caracter == '{':
+                    self.estado = 5
+                elif self.caracter == 'M':
+                    self.estado = 20
+                    self.token = self.token + self.caracter
+                    self.lista_tokens.append(f'\tFiltro\t\t Letras\t\t Fila:\t {f}\t\t Columna:\t {c+1}')
+                elif self.caracter == 'D':
+                    self.estado = 28
+                    self.token = self.token + self.caracter
+                    self.lista_tokens.append(f'\tFiltro\t\t Letras\t\t Fila:\t {f}\t\t Columna:\t {c+1}')
+                else:
+                    self.estado = 2
+                    self.lista_errores.append(f'\tFila:\t {f}\t\t Columna:\t {c+1}\t\t Error:\t {self.caracter}')
+            elif self.estado == 3:  # -----------------------------------> Estado 3
+                if self.caracter != '"' or self.caracter != ';':
+                    self.estado = 3
+                    self.token = self.token + self.caracter
+                    self.lista_tokens.append(f'\tNombre\t\t Caracteres\t\t Fila:\t {f}\t\t Columna:\t {c+1}')
+                elif self.caracter == ';':
+                    self.estado = 0
+                    self.lista_nombres.append(self.token)
+                    self.imagen.append(self.token)
+                    self.token = ''
+                    f = f + 1
 
             c = c + 1
