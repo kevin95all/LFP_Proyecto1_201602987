@@ -107,6 +107,8 @@ class Main:
             messagebox.showinfo('Información', 'No hay archivos cargados')
         else:
             self.automata.leer_archivo(self.ruta)
+            self.automata.mostrar_informacion()
+            self.automata.generar_reportes()
             self.archivo_analizado = True
             messagebox.showinfo('Información', 'Archivo analizado con exito')
 
